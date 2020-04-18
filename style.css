@@ -1,0 +1,16 @@
+div.grid-item {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+}
+div.grid-item-mouseover {
+  background-color: grey;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+}
+
+#grid-container{
+    display: grid;
+    background-color: blue;
+    padding: 5px;
+}

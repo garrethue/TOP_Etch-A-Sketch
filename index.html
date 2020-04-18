@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Etch-A-Sketch</title>
+  <meta charset="UTF-8"/>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <button id="btn">Reset</button>
+  <div id="grid-container"></div>
+  <script>
+    //Global Variables
+    let previousNumberOfGridItems = 0;
+    const btn = document.querySelector('#btn');
+    btn.addEventListener('click', resetGrid);
+
+    //__MAIN__
+    createGrid();
+
+    //Functions/////////////////////////////////////////////////////////////////////////////////
+    function createGrid(numberOfGridItems=18) {
+      previousNumberOfGridItems = numberOfGridItems; //keep a record of last grid for deletion
+
+      const containerDiv = document.querySelector("#grid-container");
+      let numberOfColumns = '';
+
+      //Stage = Build number of columns and set the style to it
+      for (var i = 0; i < numberOfGridItems; i++) {
+        if (i === numberOfGridItems - 1) { //last pass
+          numberOfColumns = numberOfColumns.concat('auto;');
+        }
+        else if (i === 0) {
+          numberOfColumns = numberOfColumns.concat('grid-template-columns: auto '); //first pass
+        }
+        else{
+          numberOfColumns = numberOfColumns.concat(' auto '); //middle passes
+        }
+      }
+      containerDiv.setAttribute('style', numberOfColumns);
+
+      //Stage = Build the grid
+      for (var i = 0; i < numberOfGridItems; i++) {
+        for (var j = 0; j < numberOfGridItems; j++) {
+          const div = document.createElement('div');
+          div.classList.add('grid-item');
+          div.id = 'item';
+
+          div.addEventListener('mouseover', () => {
+          div.classList.remove('grid-item');
+          div.classList.add('grid-item-mouseover');
+
+          });
+          containerDiv.appendChild(div);
+        }
+      }
+    }
+
+    function resetGrid() {
+      let prompt = Number( window.prompt("Please select the size of the grid:","16") );
+
+      while (prompt == 0 || isNaN(prompt)){ //if not a number or null -> 0
+        prompt = Number( window.prompt("Please select the size of the grid:","16") );
+      }
+
+      if (prompt !== 16) {
+        deleteGrid(previousNumberOfGridItems);
+        createGrid(prompt);
+      }
+
+      else {
+          const allGridItems = document.querySelectorAll('div');
+          allGridItems.forEach((gridItem) => {
+            if (gridItem.id === 'item'){ //target only the grid items, not the container
+              gridItem.classList.remove('grid-item-mouseover');
+              gridItem.classList.add('grid-item');
+            }
+          });
+      }
+    }
+
+    function deleteGrid(previousNumberOfGridItems) {
+      const containerDiv = document.querySelector('#grid-container');
+      for (var i = 0; i < previousNumberOfGridItems; i++) {
+        for (var j = 0; j < previousNumberOfGridItems; j++) {
+          containerDiv.removeChild(containerDiv.firstElementChild);
+        }
+      }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+  </script>
+</body>
+</html>
